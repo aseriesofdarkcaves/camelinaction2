@@ -8,9 +8,10 @@ public class OrderRoute extends RouteBuilder {
     public void configure() throws Exception {
         // use CXF-RS to setup the REST web service using the resource class
         // and use the simple binding style which is recommended to use
+        // call the route based on the operation invoked on the REST web service
         from("cxfrs:http://localhost:8080?resourceClasses=camelinaction.RestOrderService&bindingStyle=SimpleConsumer")
-            // call the route based on the operation invoked on the REST web service
-            .toD("direct:${header.operationName}");
+                .log("Incoming message!")
+                .recipientList(simple("direct:${header.operationName}"));
 
         // routes that implement the REST services
         from("direct:createOrder")
